@@ -1,18 +1,29 @@
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
+import { fileURLToPath } from "url";
+import { dirname } from "path";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const COLOR = {
+  RED: "red",
+  GREEN: "green",
+  BLUE: "blue",
+} as const;
+
+type Color = (typeof COLOR)[keyof typeof COLOR];
+
 class Game {
-  /**
-   * @type {Reveal[]}
-   */
-  reveals = [];
+  reveals: Reveal[] = [];
 
-  /**
-   * @type {number}
-   */
-  id;
+  id: number;
 
-  /**
-   * @param {typeof CONSTRAINTS} contraints
-   */
-  isPossible(contraints) {
+  constructor(id: number) {
+    this.id = id;
+  }
+
+  isPossible(contraints: Record<Color, number>) {
     return !this.reveals.some((reveal) => {
       let impossibleReveal = false;
 
@@ -27,18 +38,20 @@ class Game {
   }
 
   getMinimumPossiblePower() {
-    /** @type {Map<Color, number>} */
-    const minimumPossibleGame = new Map();
+    const minimumPossibleGame = new Map<Color, number>();
 
     for (const { numberOfCubesByColor } of this.reveals) {
       for (const [color, numberOfCubes] of numberOfCubesByColor) {
         if (!minimumPossibleGame.has(color)) {
           minimumPossibleGame.set(color, numberOfCubes);
         } else {
-          minimumPossibleGame.set(
-            color,
-            Math.max(minimumPossibleGame.get(color), numberOfCubes)
-          );
+          const existingNumberOfCubes = minimumPossibleGame.get(color);
+          if (typeof existingNumberOfCubes === "number") {
+            minimumPossibleGame.set(
+              color,
+              Math.max(existingNumberOfCubes, numberOfCubes)
+            );
+          }
         }
       }
     }
@@ -51,37 +64,27 @@ class Game {
     return minimumPossiblePower;
   }
 
-  /**
-   * @param {string} gameString
-   */
-  static fromString(gameString) {
+  static fromString(gameString: string) {
     const parsedString = gameString.match(/^\s*Game (\d+): (.*)$/);
     if (!parsedString) {
-      return null;
+      return process.exit(1);
     }
-    const game = new Game();
-    game.id = Number(parsedString[1]);
+    const game = new Game(Number(parsedString[1]));
     game.reveals = parsedString[2].split(";").map(Reveal.fromString);
     return game;
   }
 }
 
 class Reveal {
-  /**
-   * @type {Map<Color, number>}
-   */
-  numberOfCubesByColor = new Map();
+  numberOfCubesByColor = new Map<Color, number>();
 
-  /**
-   * @param {string} revealString
-   */
-  static fromString(revealString) {
+  static fromString(revealString: string) {
     const reveal = new Reveal();
     const cubeStrings = revealString.split(",");
     cubeStrings.forEach((cubeString) => {
       const parsedString = cubeString.match(/\s*(\d+)\s*(\D+)\s*/);
       if (parsedString) {
-        const color = Color[parsedString[2].toUpperCase()];
+        const color = parsedString[2] as Color;
         reveal.numberOfCubesByColor.set(color, Number(parsedString[1]));
       }
     });
@@ -89,39 +92,17 @@ class Reveal {
   }
 }
 
-const Color = {
-  RED: 1,
-  GREEN: 2,
-  BLUE: 3,
-};
-
-const CONSTRAINTS = {
-  [Color.RED]: 12,
-  [Color.GREEN]: 13,
-  [Color.BLUE]: 14,
-};
-
-/**
- * @param {string} input
- * @returns {Game[]}
- */
-function parseInput(input) {
+function parseInput(input: string) {
   return input.split("\n").filter(Boolean).map(Game.fromString);
 }
 
-/**
- * @param {Number[]} array
- * @param {(object) => number} numberGetter
- */
-function sum(array, numberGetter) {
+function sum<T>(array: T[], numberGetter: (anObject: T) => number) {
   return array.reduce((result, object) => result + numberGetter(object), 0);
 }
 
-/**
- * @param {Game[]} games
- * @param {typeof CONSTRAINTS} contraints
- */
-function solvePossibleGames(games, contraints) {
+type Contraints = Record<Color, number>;
+
+function solvePuzzle1(games: Game[], contraints: Contraints) {
   const possibleGames = games.filter((game) => game.isPossible(contraints));
   if (!possibleGames) {
     return 0;
@@ -129,15 +110,19 @@ function solvePossibleGames(games, contraints) {
   return sum(possibleGames, (possibleGame) => possibleGame.id);
 }
 
-/**
- * @param {Game[]} games
- */
-function solveMinimumPossibleGames(games) {
+function solvePuzzle2(games: Game[]) {
   return sum(games, (game) => game.getMinimumPossiblePower());
 }
 
-const inputPath = require("path").resolve(__dirname, "./puzzle-input.txt");
-const games = parseInput(require("fs").readFileSync(inputPath).toString());
+const games = parseInput(
+  readFileSync(resolve(__dirname, "./puzzle-input.txt")).toString()
+);
 
-console.log(solvePossibleGames(games, CONSTRAINTS));
-console.log(solveMinimumPossibleGames(games));
+console.log(
+  solvePuzzle1(games, {
+    [COLOR.RED]: 12,
+    [COLOR.GREEN]: 13,
+    [COLOR.BLUE]: 14,
+  })
+);
+console.log(solvePuzzle2(games));

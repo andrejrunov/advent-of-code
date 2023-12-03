@@ -1,0 +1,14 @@
+{
+  "name": "advent-of-code",
+  "type": "module",
+  "scripts": {
+    "clean": "git clean -xdf src",
+    "build": "npm run clean && tsc",
+    "2023:02": "npm run build && node src/2023/02/index.js"
+  },
+  "devDependencies": {
+    "@tsconfig/node18": "^18.2.2",
+    "@types/node": "^18.19.1",
+    "typescript": "^5.3.2"
+  }
+}
