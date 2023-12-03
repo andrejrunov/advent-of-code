@@ -1,10 +1,6 @@
-import { readFileSync } from "node:fs";
-import { resolve } from "node:path";
-import { fileURLToPath } from "url";
-import { dirname } from "path";
+import { readFileSync } from "../lib/fs.js";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+import assert from "node:assert/strict";
 
 const COLOR = {
   RED: "red",
@@ -114,15 +110,19 @@ function solvePuzzle2(games: Game[]) {
   return sum(games, (game) => game.getMinimumPossiblePower());
 }
 
-const games = parseInput(
-  readFileSync(resolve(__dirname, "./puzzle-input.txt")).toString()
-);
+const games = parseInput(readFileSync(import.meta.url, "./puzzle-input.txt"));
 
-console.log(
-  solvePuzzle1(games, {
-    [COLOR.RED]: 12,
-    [COLOR.GREEN]: 13,
-    [COLOR.BLUE]: 14,
-  })
-);
-console.log(solvePuzzle2(games));
+const puzzle1Answer = solvePuzzle1(games, {
+  [COLOR.RED]: 12,
+  [COLOR.GREEN]: 13,
+  [COLOR.BLUE]: 14,
+});
+const puzzle2Answer = solvePuzzle2(games);
+
+console.log({
+  puzzle1Answer,
+  puzzle2Answer,
+});
+
+assert.equal(puzzle1Answer, 2486, "puzzle 1 answer is incorrect");
+assert.equal(puzzle2Answer, 87984, "puzzle 2 answer is incorrect");
