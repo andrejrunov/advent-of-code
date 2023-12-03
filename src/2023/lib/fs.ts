@@ -7,5 +7,5 @@ export function readFileSync(base: string, name: string) {
   const __filename = fileURLToPath(base);
   const __dirname = dirname(__filename);
 
-  return nodeReadFileSync(resolve(__dirname, "./puzzle-input.txt")).toString();
+  return nodeReadFileSync(resolve(__dirname, name)).toString();
 }
