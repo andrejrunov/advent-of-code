@@ -19,12 +19,12 @@ class Game {
     this.id = id;
   }
 
-  isPossible(contraints: Record<Color, number>) {
+  isPossible(constraints: Record<Color, number>) {
     return !this.reveals.some((reveal) => {
       let impossibleReveal = false;
 
       for (const [color, numberOfCubes] of reveal.numberOfCubesByColor) {
-        if (numberOfCubes > contraints[color]) {
+        if (numberOfCubes > constraints[color]) {
           impossibleReveal = true;
           break;
         }
@@ -96,10 +96,10 @@ function sum<T>(array: T[], numberGetter: (anObject: T) => number) {
   return array.reduce((result, object) => result + numberGetter(object), 0);
 }
 
-type Contraints = Record<Color, number>;
+type Constraints = Record<Color, number>;
 
-function solvePuzzle1(games: Game[], contraints: Contraints) {
-  const possibleGames = games.filter((game) => game.isPossible(contraints));
+function solvePuzzle1(games: Game[], constraints: Constraints) {
+  const possibleGames = games.filter((game) => game.isPossible(constraints));
   if (!possibleGames) {
     return 0;
   }
