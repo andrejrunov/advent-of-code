@@ -4,7 +4,8 @@
   "scripts": {
     "clean": "git clean -xdf 'src/**/*.js'",
     "build": "npm run clean && tsc",
-    "2023:02": "npm run build && node src/2023/02/index.js"
+    "2023:01": "npm run build && node src/2023/01",
+    "2023:02": "npm run build && node src/2023/02"
   },
   "devDependencies": {
     "@tsconfig/node18": "^18.2.2",

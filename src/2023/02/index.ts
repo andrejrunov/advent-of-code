@@ -1,4 +1,5 @@
 import { readFileSync } from "../lib/fs.js";
+import { sum } from "../lib/math.js";
 
 import assert from "node:assert/strict";
 
@@ -90,10 +91,6 @@ class Reveal {
 
 function parseInput(input: string) {
   return input.split("\n").filter(Boolean).map(Game.fromString);
-}
-
-function sum<T>(array: T[], numberGetter: (anObject: T) => number) {
-  return array.reduce((result, object) => result + numberGetter(object), 0);
 }
 
 type Constraints = Record<Color, number>;
