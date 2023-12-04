@@ -4,7 +4,7 @@
   "scripts": {
     "clean": "git clean -xdf 'src/**/*.js'",
     "lint": "eslint .",
-    "build": "npm run clean && tsc",
+    "build": "npm run clean && tsc && npm run lint",
     "2023:01": "npm run build && node src/2023/01",
     "2023:02": "npm run build && node src/2023/02"
   },

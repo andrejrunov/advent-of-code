@@ -54,7 +54,7 @@ class Game {
     }
     let minimumPossiblePower = 1;
 
-    for (const [color, number] of minimumPossibleGame) {
+    for (const number of minimumPossibleGame.values()) {
       minimumPossiblePower *= number;
     }
 
