@@ -1,4 +1,7 @@
 {
   "extends": "@tsconfig/node18/tsconfig.json",
-  "include": ["**/*.ts"]
+  "include": ["**/*.ts"],
+  "compilerOptions": {
+    "sourceMap": true
+  }
 }
