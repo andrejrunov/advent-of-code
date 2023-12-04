@@ -3,6 +3,7 @@
   "type": "module",
   "scripts": {
     "clean": "git clean -xdf 'src/**/*.js'",
+    "lint": "eslint .",
     "build": "npm run clean && tsc",
     "2023:01": "npm run build && node src/2023/01",
     "2023:02": "npm run build && node src/2023/02"
@@ -10,6 +11,9 @@
   "devDependencies": {
     "@tsconfig/node18": "^18.2.2",
     "@types/node": "^18.19.1",
+    "@typescript-eslint/eslint-plugin": "^6.13.1",
+    "@typescript-eslint/parser": "^6.13.1",
+    "eslint": "^8.55.0",
     "typescript": "^5.3.2"
   }
 }
