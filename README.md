@@ -9,7 +9,7 @@
 ```sh
 nvm use # if using NVM
 npm i
-npm run <YEAR>:<DAY>
+DATE=2023/01 npm start
 ```
 
 See available years and days in `src/`.
