@@ -5,35 +5,46 @@ import assert from "node:assert/strict";
 const input = readFileSync(import.meta.url, "./puzzle-input.txt");
 const lines = input.split("\n");
 
-function toStringArray(spaceSeparatedNumbersString: string) {
-  return spaceSeparatedNumbersString.split(/\s+/);
+function toReadOnlyStringArray(spaceSeparatedNumbersString: string) {
+  return Object.freeze(spaceSeparatedNumbersString.split(/\s+/));
 }
 
 type CardId = number;
 
 class Card {
   readonly id: CardId;
-  readonly winningNumbers: string[];
-  readonly numbers: string[];
+  readonly winningNumbers: readonly string[];
+  readonly numbers: readonly string[];
   readonly isCopy: boolean;
+  readonly nextCardIdsWon: readonly CardId[];
 
   constructor(
     id: CardId,
-    winningNumbers: string[],
-    numbers: string[],
-    isCopy: boolean = false
+    winningNumbers: readonly string[],
+    numbers: readonly string[],
+    isCopy: boolean = false,
+    nextCardIdsWon?: readonly CardId[]
   ) {
     this.id = id;
     this.winningNumbers = winningNumbers;
     this.numbers = numbers;
     this.isCopy = isCopy;
+    this.nextCardIdsWon = nextCardIdsWon
+      ? nextCardIdsWon
+      : this.calculateNextCardIdsWon();
   }
 
   copy() {
-    return new Card(this.id, [...this.winningNumbers], [...this.numbers], true);
+    return new Card(
+      this.id,
+      this.winningNumbers,
+      this.numbers,
+      true,
+      this.nextCardIdsWon
+    );
   }
 
-  get nextCardIdsWon() {
+  calculateNextCardIdsWon() {
     const result = [];
 
     let nextCardId = this.id + 1;
@@ -43,7 +54,7 @@ class Card {
       }
     }
 
-    return result;
+    return Object.freeze(result);
   }
 
   get points() {
@@ -67,8 +78,8 @@ class Card {
     }
     return new Card(
       Number(match[1]),
-      toStringArray(match[2]),
-      toStringArray(match[3])
+      toReadOnlyStringArray(match[2]),
+      toReadOnlyStringArray(match[3])
     );
   }
 }
