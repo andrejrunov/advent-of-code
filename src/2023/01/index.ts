@@ -47,7 +47,7 @@ function digitsFinderForPuzzle2(line: string) {
 
 function getCalibrationValue(
   line: string,
-  digitsFinder: (line: string) => number[]
+  digitsFinder: (line: string) => number[],
 ) {
   const digits = digitsFinder(line);
   return digits.length ? Number(`${digits[0]}${digits[digits.length - 1]}`) : 0;
@@ -55,13 +55,13 @@ function getCalibrationValue(
 
 function solvePuzzle1() {
   return sum(
-    input.map((line) => getCalibrationValue(line, digitsFinderForPuzzle1))
+    input.map((line) => getCalibrationValue(line, digitsFinderForPuzzle1)),
   );
 }
 
 function solvePuzzle2() {
   return sum(
-    input.map((line) => getCalibrationValue(line, digitsFinderForPuzzle2))
+    input.map((line) => getCalibrationValue(line, digitsFinderForPuzzle2)),
   );
 }
 

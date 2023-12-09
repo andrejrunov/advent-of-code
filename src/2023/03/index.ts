@@ -9,7 +9,7 @@ const numberOfLines = lines.length;
 function validatePartNumber(
   lineIndex: number,
   partNumber: string,
-  partNumberIndex: number
+  partNumberIndex: number,
 ) {
   const line = lines[lineIndex];
   const lineLength = line.length;
@@ -27,7 +27,7 @@ function validatePartNumber(
   function addPossibleAdjacentGears(
     adjacentCharacters: string,
     lineIndex: number,
-    startIndex: number
+    startIndex: number,
   ) {
     const gearSymbolsMatches = adjacentCharacters.matchAll(gearSymbols);
     for (const { index } of gearSymbolsMatches) {
@@ -35,7 +35,7 @@ function validatePartNumber(
         possibleAdjacentGears.add(
           lineIndex,
           startIndex + index,
-          Number(partNumber)
+          Number(partNumber),
         );
       }
     }
@@ -95,7 +95,7 @@ function findPartNumbers() {
         const { isValid, possibleAdjacentGears } = validatePartNumber(
           index,
           possiblePartNumber,
-          possiblePartNumberIndex
+          possiblePartNumberIndex,
         );
         if (isValid) {
           possibleGears.mergeWith(possibleAdjacentGears);
@@ -139,7 +139,7 @@ class GearMatrix {
   }
 
   forEachGear(
-    callback: (gear: Gear, lineIndex: number, index: number) => void
+    callback: (gear: Gear, lineIndex: number, index: number) => void,
   ) {
     for (const [lineIndex, gears] of this.map.entries()) {
       for (const [index, gear] of gears.entries()) {
@@ -151,7 +151,7 @@ class GearMatrix {
   mergeWith(otherGearMatrix: GearMatrix) {
     otherGearMatrix.forEachGear((gear, lineIndex, index) => {
       gear.adjacentPartNumbers.forEach((adjacentPartNumber) =>
-        this.add(lineIndex, index, adjacentPartNumber)
+        this.add(lineIndex, index, adjacentPartNumber),
       );
     });
   }

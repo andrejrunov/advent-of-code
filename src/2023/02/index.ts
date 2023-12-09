@@ -46,7 +46,7 @@ class Game {
           if (typeof existingNumberOfCubes === "number") {
             minimumPossibleGame.set(
               color,
-              Math.max(existingNumberOfCubes, numberOfCubes)
+              Math.max(existingNumberOfCubes, numberOfCubes),
             );
           }
         }

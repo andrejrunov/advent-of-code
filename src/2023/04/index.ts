@@ -23,7 +23,7 @@ class Card {
     winningNumbers: readonly string[],
     numbers: readonly string[],
     isCopy: boolean = false,
-    nextCardIdsWon?: readonly CardId[]
+    nextCardIdsWon?: readonly CardId[],
   ) {
     this.id = id;
     this.winningNumbers = winningNumbers;
@@ -40,7 +40,7 @@ class Card {
       this.winningNumbers,
       this.numbers,
       true,
-      this.nextCardIdsWon
+      this.nextCardIdsWon,
     );
   }
 
@@ -71,7 +71,7 @@ class Card {
 
   static fromString(cardString: string): Card {
     const match = cardString.match(
-      /^Card\s+(\d+)\s*:\s+([\d\s]+)\s+\|\s+([\d\s]+)$/
+      /^Card\s+(\d+)\s*:\s+([\d\s]+)\s+\|\s+([\d\s]+)$/,
     );
     if (!match) {
       process.exit(1);
@@ -79,7 +79,7 @@ class Card {
     return new Card(
       Number(match[1]),
       toReadOnlyStringArray(match[2]),
-      toReadOnlyStringArray(match[3])
+      toReadOnlyStringArray(match[3]),
     );
   }
 }
@@ -109,7 +109,7 @@ function solvePuzzle2() {
     if (nextCardIdsWon.length) {
       allCardIdsWon.push(...nextCardIdsWon);
       cardsToProcess.unshift(
-        ...nextCardIdsWon.map((cardId) => (cardMap.get(cardId) as Card).copy())
+        ...nextCardIdsWon.map((cardId) => (cardMap.get(cardId) as Card).copy()),
       );
     }
   }
